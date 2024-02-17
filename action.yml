@@ -1,0 +1,17 @@
+name: "AutoML Classifier Action"
+description: "Getting started with building A classifier model"
+author: "Tanuj Pandey"
+inputs:
+  myInput:
+    description: "Provide inputs for the classification model"
+    required: true
+    default: "zeroinputs"
+outputs:
+  myOutput:
+    description: "Outputs from the action"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+branding:
+  icon: 'box'
+  color: 'blue'

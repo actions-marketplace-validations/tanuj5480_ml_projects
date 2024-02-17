@@ -1,7 +1,6 @@
 def main():
     # Get the dataset from the users GitHub repository
-    # dataset_path = "https://raw.githubusercontent.com/" + os.environ["GITHUB_REPOSITORY"] +"/master/dataset.csv"
-    dataset_path = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv"
+    dataset_path = "https://raw.githubusercontent.com/" + os.environ["GITHUB_REPOSITORY"] +"/master/dataset.csv"
     data = pd.read_csv(dataset_path)
     print()
     print(data.describe())

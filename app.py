@@ -1,0 +1,34 @@
+def main():
+    # Get the dataset from the users GitHub repository
+    # dataset_path = "https://raw.githubusercontent.com/" + os.environ["GITHUB_REPOSITORY"] +"/master/dataset.csv"
+    dataset_path = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv"
+    data = pd.read_csv(dataset_path)
+    print()
+    print(data.describe())
+
+    x=data.iloc[:,:-1]
+    y=data.iloc[:,-1]
+    column_trans = make_column_transformer((OneHotEncoder(),[-1]),remainder='passthrough') # apply encoding on output variable
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state=0)
+    
+    #define a pipeline
+    pipe = make_pipeline(column_trans,SVC())
+    pipe.fit(x_train,y_train) #training the model
+    print("\nModel Training Finished")
+    accuracy = pipe.score(x_test,y_test)
+    print("\nAccuracy of the Model: "+str(accuracy*100))
+
+    if pipe:
+        pickle.dump(pipe,open('model.pkl','wb')) # store the artifact in docker container
+
+    if not os.environ["INPUT_MYINPUT"] == 'zeroinputs':
+        inputs = ast.literal_eval(os.environ["INPUT_MYINPUT"])
+        print("\nThe Predicted Ouput is :")
+        output = pipe.predict([inputs])
+        print(output)
+    else:
+        output = ["None"]
+        print("\nUser didn't provided inputs to predict")
+    
+    print("\n=======================Action Completed========================")
+    print(f"::set-output name=myOutput::{output[0]}")
